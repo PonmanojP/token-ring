@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Game</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome Player <%= player.id %></h2>
+
+        <h3>Shared Resource:</h3>
+        <p id="sharedResource"><%= sharedResource %></p>
+
+        <textarea id="editBox" disabled><%= sharedResource %></textarea>
+        <button id="saveButton" disabled onclick="saveChanges()">Save</button>
+        <button id="passButton" disabled onclick="passToken()">Pass Token</button>
+
+        <div id="playerRing">
+            <% players.forEach((player, index) => { %>
+                <div class="player <%= tokenIndex === index ? 'token' : (player.canEdit ? 'editor' : (player.isRequesting ? 'requesting' : 'other')) %>" 
+                     style="top: <%= 200 + 150 * Math.sin(2 * Math.PI * index / players.length) %>px; 
+                            left: <%= 200 + 150 * Math.cos(2 * Math.PI * index / players.length) %>px;">
+                    <%= player.id %>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+
+    <script>
+        var socket = io();
+        var playerId = <%= player.id %>;
+        var isEditor = <%= player.canEdit %>;
+        var isTokenHolder = <%= tokenIndex === (player.id - 1) %>;
+
+        function updateUI() {
+            if (isTokenHolder) {
+                document.getElementById("passButton").disabled = false;
+                if (isEditor) {
+                    document.getElementById("editBox").disabled = false;
+                    document.getElementById("saveButton").disabled = false;
+                }
+            }
+        }
+
+        function passToken() {
+            socket.emit("passToken");
+        }
+
+        function saveChanges() {
+            let newValue = document.getElementById("editBox").value;
+            socket.emit("updateResource", { value: newValue, playerId: playerId });
+        }
+
+        socket.on("resourceUpdated", function(data) {
+            document.getElementById("sharedResource").innerText = data;
+            document.getElementById("editBox").value = data;
+        });
+
+        socket.on("updateToken", function(index) {
+            location.reload(); // Refresh UI when token updates
+        });
+
+        socket.on("playerUpdated", function(updatedPlayers) {
+            updatedPlayers.forEach((p, i) => {
+                let playerDiv = document.querySelectorAll('.player')[i];
+                if (p.canEdit) {
+                    playerDiv.className = "player editor"; // Green
+                } else if (p.isRequesting) {
+                    playerDiv.className = "player requesting"; // Red
+                } else {
+                    playerDiv.className = "player other"; // Default
+                }
+            });
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>

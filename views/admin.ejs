@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Panel</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h2>Admin Panel</h2>
+
+    <h3>Shared Resource:</h3>
+    <p id="sharedResource"><%= sharedResource %></p>
+
+    <h3>Players (Ring Structure):</h3>
+    <div id="playerRing">
+        <% players.forEach((player, index) => { %>
+            <div class="player 
+                <%= tokenIndex === index ? 'token' : '' %> 
+                <%= player.canEdit ? 'editor' : '' %> 
+                <%= !player.canEdit && tokenIndex !== index ? 'other' : '' %>"
+                style="transform: rotate(<%= (index * (360 / players.length)) %>deg) translate(180px) rotate(-<%= (index * (360 / players.length)) %>deg);">
+                P<%= player.id %>
+            </div>
+        <% }); %>
+    </div>
+
+    <script>
+        var socket = io();
+        socket.on("resourceUpdated", function(data) {
+            document.getElementById("sharedResource").innerText = data;
+        });
+        socket.on("updateToken", function(index) {
+            location.reload(); // Refresh UI when token updates
+        });
+    </script>
+</body>
+</html>

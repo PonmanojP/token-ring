@@ -1,0 +1,73 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-image: url('https://imgs.search.brave.com/ggIdZlIISk5G7JmZtuz8Yd_At5n0XbZr9axWv9ohK7g/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTIy/Mzc1NDIxNy92ZWN0/b3IvZW1vamktc2Vh/bWxlc3MtcGF0dGVy/bi1iYWNrZ3JvdW5k/LmpwZz9zPTYxMng2/MTImdz0wJms9MjAm/Yz1xTmVHeklwa0pn/WEFiRXQzbjk2T3hK/WEJBZ1ptclBaU290/T2NJUW1BWkJJPQ');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h2 {
+    color: #333;
+}
+
+.container{
+    background-color: white;
+    width:40%;
+    border-radius: 50px;
+}
+
+#playerRing {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 20px auto;
+    border-radius: 50%;
+}
+
+.player {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border-radius: 50%;
+    font-weight: bold;
+    color: white;
+    border: 2px solid black;
+}
+
+/* Red = Editors (Waiting) */
+.editor {
+    background-color: red;
+}
+
+/* Yellow = Token Holder */
+.token {
+    background-color: yellow;
+}
+
+/* Green = Non-Editors (Waiting) */
+.other {
+    background-color: green;
+}
+
+#editBox {
+    width: 40%;
+    height: 80px;
+    display: block;
+    margin: 10px auto;
+}
+
+button {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.requesting {
+    background-color: red !important;
+}
+
+
