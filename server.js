@@ -51,7 +51,7 @@ function toggleRequestAccess() {
 // Start the random red request cycle
 
 app.get("/", (req, res) => {
-    res.render("index");
+    res.render("admin", { players, tokenIndex, sharedResource });
 });
 
 // Admin Panel
